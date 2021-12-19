@@ -1,16 +1,15 @@
-FROM alpine:3.14
+FROM alpine:3.15
 
-RUN adduser -u 1000 -D -S -G www-data www-data
+#RUN adduser -u 1000 -D -S -G www-data www-data
 
 RUN apk -U update && \
     apk -U upgrade && \
-    apk -U add --no-cache \
+    apk -U add --no-cache --virtual .spotweb-rundeps \
         bash \
-        coreutils \
-        ca-certificates \
-        shadow \
         curl \
-        git \
+		libldap \
+		libsasl \
+		mariadb-client \
         nginx \
         php8 \
         php8-fpm \
@@ -36,28 +35,27 @@ RUN apk -U update && \
         php8-opcache \
         php8-session 
 
-
-
-RUN git clone --depth=1 --branch 1.5.1 https://github.com/spotweb/spotweb.git /app
-
-RUN mkdir /app/cache
-
-RUN chown -R www-data:www-data /app
-
-RUN mkdir /run/php
-RUN chown -R www-data:www-data /run/php
+# Install Spotweb
+RUN apk add --no-cache --virtual .spotweb-deploydeps git \
+	&& git clone --depth=1 --branch 1.5.1 https://github.com/spotweb/spotweb.git /app \
+	&& mkdir -m777 /app/cache \
+    && apk del .spotweb-deploydeps
 
 #RUN echo "*/5       *       *       *       *       run-parts /etc/periodic/5min" >> /etc/crontabs/root
 
 # Configure Spotweb
 #COPY ./conf/spotweb /app
 
-# Copy root filesystem
-COPY etc /etc
-COPY entrypoint.sh /etc/entrypoint.sh
+# Copy configuration files
+COPY /config /
 
-RUN chmod +x /etc/entrypoint.sh
+# Copy entrypoint
+COPY entrypoint.sh /entrypoint.sh
+
+# Fix App Permissions and ensure entrypoint is executable
+RUN chown -R nginx: /app \
+    && chmod +x /entrypoint.sh
 
 EXPOSE 80
 
-ENTRYPOINT [ "sh", "/etc/entrypoint.sh" ]
+ENTRYPOINT [ "sh", "/entrypoint.sh" ]

@@ -1,0 +1,29 @@
+version: '2'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  spotweb:
+    image: 'jbaten/spotweb:0.8.14'
+    environment:
+      - DB_ENGINE=pdo_mysql
+      - DB_HOST=mariadb
+      - DB_PORT=3306
+      - DB_DATABASE=mini
+      - DB_USER=mini
+      - DB_PASSWORD=mini
+    networks:
+      - app-tier
+    ports:
+      - '80:8080'
+  mariadb:
+    image: bitnami/mariadb:latest
+    environment:
+        - MARIADB_USER=mini
+        - MARIADB_PASSWORD=mini
+        - MARIADB_DATABASE=mini
+        - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - app-tier
