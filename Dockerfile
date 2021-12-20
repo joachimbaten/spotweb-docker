@@ -43,9 +43,6 @@ RUN apk add --no-cache --virtual .spotweb-deploydeps git \
 
 #RUN echo "*/5       *       *       *       *       run-parts /etc/periodic/5min" >> /etc/crontabs/root
 
-# Configure Spotweb
-#COPY ./conf/spotweb /app
-
 # Copy configuration files
 COPY /config /
 

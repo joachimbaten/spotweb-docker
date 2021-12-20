@@ -35,12 +35,27 @@ retval=$?
 if [ $retval == 1 ]; then
    echo "Initializing database"
    /usr/bin/php8 /app/bin/init-db.php
+   echo "Database initialization complete."
 #    # Run upgrade-db.php twice to update global options ...
 #    /usr/bin/php8 /app/bin/upgrade-db.php
 #    /usr/bin/php8 /app/bin/upgrade-db.php --reset-password admin
 else
-   echo "Database already exists"
+   echo "Database already exists - upgrading"
    /usr/bin/php8 /app/bin/upgrade-db.php
+   echo "Database upgrade complete."
 fi
+
+# Save db settings
+{ 
+    echo '<?php'; \
+    echo '$dbsettings["engine"] = "'${DB_ENGINE}'";'; \
+    echo '$dbsettings["host"] = "'${DB_HOST}'";'; \
+    echo '$dbsettings["dbname"] = "'${DB_DATABASE}'";'; \
+    echo '$dbsettings["user"] = "'${DB_USER}'";'; \
+    echo '$dbsettings["pass"] = "'${DB_PASSWORD}'";'; \
+    echo '$dbsettings["port"] = "'${DB_PORT}'";'; \
+    echo '$dbsettings["schema"] = "'${DB_SCHEMA}'";'; \
+    echo '?>'; \
+} | tee /app/dbsettings.inc.php
 
 exit 0

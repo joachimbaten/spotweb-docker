@@ -6,7 +6,7 @@ networks:
 
 services:
   spotweb:
-    image: 'jbaten/spotweb:0.8.14'
+    image: 'jbaten/spotweb:0.9.6'
     environment:
       - DB_ENGINE=pdo_mysql
       - DB_HOST=mariadb
@@ -14,10 +14,17 @@ services:
       - DB_DATABASE=mini
       - DB_USER=mini
       - DB_PASSWORD=mini
+      - DB_SCHEMA=public
+      - SPOTWEB_SYSTEMTYPE=public
+      - SPOTWEB_USERNAME=myawesomeuser
+      - SPOTWEB_PASSWORD=demo123
+      - SPOTWEB_FIRSTNAME=demo
+      - SPOTWEB_LASTNAME=spotweb
+      - SPOTWEB_MAIL=demo@spotweb.com
     networks:
       - app-tier
     ports:
-      - '80:8080'
+      - '9080:80'
   mariadb:
     image: bitnami/mariadb:latest
     environment:
