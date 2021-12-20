@@ -6,31 +6,41 @@ networks:
 
 services:
   spotweb:
-    image: 'jbaten/spotweb:0.9.6'
+    image: 'jbaten/spotweb:0.10.7'
     environment:
-      - DB_ENGINE=pdo_mysql
-      - DB_HOST=mariadb
-      - DB_PORT=3306
-      - DB_DATABASE=mini
-      - DB_USER=mini
-      - DB_PASSWORD=mini
+      - DB_ENGINE=pdo_pgsql
+      - DB_HOST=postgresdb
+      - DB_PORT=5432
+      - DB_DATABASE=spotweb
+      - DB_USER=spotweb
+      - DB_PASSWORD=spotweb
       - DB_SCHEMA=public
-      - SPOTWEB_SYSTEMTYPE=public
+      - SPOTWEB_SYSTEMTYPE=single
       - SPOTWEB_USERNAME=myawesomeuser
-      - SPOTWEB_PASSWORD=demo123
+      - SPOTWEB_PASSWORD=spotweb
       - SPOTWEB_FIRSTNAME=demo
       - SPOTWEB_LASTNAME=spotweb
       - SPOTWEB_MAIL=demo@spotweb.com
+      - SPOTWEB_RETRIEVE=15min
     networks:
       - app-tier
     ports:
       - '9080:80'
+  postgresdb:
+    image: bitnami/postgresql:latest
+    environment:
+      - POSTGRESQL_PASSWORD=spotweb
+      - POSTGRESQL_USERNAME=spotweb
+      - POSTGRESQL_DATABASE=spotweb
+      - POSTGRESQL_POSTGRES_PASSWORD=spotweb
+    networks:
+      - app-tier
   mariadb:
     image: bitnami/mariadb:latest
     environment:
-        - MARIADB_USER=mini
-        - MARIADB_PASSWORD=mini
-        - MARIADB_DATABASE=mini
+        - MARIADB_USER=spotweb
+        - MARIADB_PASSWORD=spotweb
+        - MARIADB_DATABASE=spotweb
         - ALLOW_EMPTY_PASSWORD=yes
     networks:
       - app-tier

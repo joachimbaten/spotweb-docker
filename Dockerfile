@@ -10,6 +10,7 @@ RUN apk -U update && \
 		libldap \
 		libsasl \
 		mariadb-client \
+        postgresql-client \
         nginx \
         php8 \
         php8-fpm \

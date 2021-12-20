@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# Determine database engine
 SQL=""
 
 if [ $DB_ENGINE = "pdo_mysql" ]; then
@@ -10,15 +11,16 @@ fi;
 
 if [ $DB_ENGINE = "pdo_pgsql" ]; then
     echo "Checking if PostgreSQL DB is online"
-    echo "NOT YET SUPPORTED!"
-    exit 1
+    # postgresql://[user[:password]@][netloc][:port][/dbname]
+    SQL="psql -At postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}"
 fi
 
+# Wait for database to startup
 maxcounter=10
 counter=1
 while [ 1 ]; do
     sleep 5
-    echo -e "Attempt " ${counter} " (Host: " ${DB_HOST} ":" ${DB_PORT} " - User: " ${DB_USER} " - Database: " ${DB_DATABASE} ")"
+    echo -e "Attempt ${counter} (Host: ${DB_HOST}:${DB_PORT} - User: ${DB_USER} - Database: ${DB_DATABASE})"
     echo "select 1" | $SQL > /dev/null 2>&1 && break
     counter=`expr $counter + 1`
     if [ $counter -gt $maxcounter ]; then
@@ -36,9 +38,6 @@ if [ $retval == 1 ]; then
    echo "Initializing database"
    /usr/bin/php8 /app/bin/init-db.php
    echo "Database initialization complete."
-#    # Run upgrade-db.php twice to update global options ...
-#    /usr/bin/php8 /app/bin/upgrade-db.php
-#    /usr/bin/php8 /app/bin/upgrade-db.php --reset-password admin
 else
    echo "Database already exists - upgrading"
    /usr/bin/php8 /app/bin/upgrade-db.php
