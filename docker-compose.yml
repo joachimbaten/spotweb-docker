@@ -1,0 +1,38 @@
+version: '2'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  spotweb:
+    image: 'jbaten/spotweb:1.5.1'
+    environment:
+      - TZ=Europe/Brussels
+      - DB_ENGINE=pdo_pgsql
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=spotweb
+      - DB_USER=spotweb
+      - DB_PASSWORD=spotweb
+      - DB_SCHEMA=public
+      - SPOTWEB_SYSTEMTYPE=single
+      - SPOTWEB_USERNAME=myawesomeuser
+      - SPOTWEB_PASSWORD=spotweb
+      - SPOTWEB_FIRSTNAME=demo
+      - SPOTWEB_LASTNAME=spotweb
+      - SPOTWEB_MAIL=demo@spotweb.com
+      - SPOTWEB_RETRIEVE=15min
+    networks:
+      - app-tier
+    ports:
+      - '9080:80'
+  db:
+    image: bitnami/postgresql:latest
+    environment:
+      - POSTGRESQL_PASSWORD=spotweb
+      - POSTGRESQL_USERNAME=spotweb
+      - POSTGRESQL_DATABASE=spotweb
+      - POSTGRESQL_POSTGRES_PASSWORD=spotweb
+    networks:
+      - app-tier
