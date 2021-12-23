@@ -96,7 +96,6 @@ try {
 
 } catch (Exception $x) {
     echo PHP_EOL.PHP_EOL;
-    echo 'SpotWeb crashed'.PHP_EOL.PHP_EOL;
     echo 'Initializing database schema or settings failed:'.PHP_EOL;
     echo '   '.$x->getMessage().PHP_EOL;
     echo PHP_EOL.PHP_EOL;

@@ -12,6 +12,7 @@ RUN apk -U update && \
 		mariadb-client \
         postgresql-client \
         nginx \
+        supervisor \
         php8 \
         php8-fpm \
         php8-curl \
@@ -42,7 +43,12 @@ RUN apk add --no-cache --virtual .spotweb-deploydeps git \
 	&& mkdir -m777 /app/cache \
     && apk del .spotweb-deploydeps
 
-#RUN echo "*/5       *       *       *       *       run-parts /etc/periodic/5min" >> /etc/crontabs/root
+# Create additional periodic folders for cron
+RUN mkdir /etc/periodic/1min \
+    && mkdir /etc/periodic/5min
+
+RUN echo "*/5     *       *       *       *       run-parts /etc/periodic/5min" >> /etc/crontabs/root
+RUN echo "*/1     *       *       *       *       run-parts /etc/periodic/1min" >> /etc/crontabs/root
 
 # Copy configuration files
 COPY /config /
