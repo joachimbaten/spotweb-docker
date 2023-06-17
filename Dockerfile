@@ -39,7 +39,7 @@ RUN apk -U update && \
 
 # Install Spotweb
 RUN apk add --no-cache --virtual .spotweb-deploydeps git \
-	&& git clone --depth=1 --branch 1.5.1 https://github.com/spotweb/spotweb.git /app \
+	&& git clone --depth=1 --branch 1.5.4 https://github.com/spotweb/spotweb.git /app \
 	&& mkdir -m777 /app/cache \
     && apk del .spotweb-deploydeps
 
