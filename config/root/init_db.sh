@@ -49,11 +49,11 @@ $SQL "select count(*) from settings" > /dev/null 2>&1
 retval=$?
 if [ $retval == 1 ]; then
    echo "Initializing database"
-   /usr/bin/php8 /app/bin/init-db.php
+   /usr/bin/php82 /app/bin/init-db.php
    echo "Database initialization complete."
 else
    echo "Database already exists - upgrading"
-   /usr/bin/php8 /app/bin/upgrade-db.php
+   /usr/bin/php82 /app/bin/upgrade-db.php
    echo "Database upgrade complete."
 fi
 

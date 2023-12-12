@@ -6,7 +6,7 @@ networks:
 
 services:
   spotweb:
-    image: 'jbaten/spotweb:1.5.4'
+    image: 'jbaten/spotweb:develop'
     environment:
       - TZ=Europe/Brussels
       - DB_ENGINE=pdo_pgsql
