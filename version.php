@@ -3,6 +3,6 @@
   <title>Application version</title>
  </head>
  <body>
- <?php echo '<p>version 0.1.0</p>'; ?> 
+ <?php echo '<p>version 5.1.4</p>'; ?> 
  </body>
 </html>

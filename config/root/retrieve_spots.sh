@@ -1,3 +1,3 @@
 #!/bin/sh
 
-/usr/bin/php8 /app/retrieve.php
+/usr/bin/php82 /app/retrieve.php

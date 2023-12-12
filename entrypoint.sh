@@ -3,7 +3,7 @@
 # Set Time Zone
 TZ=${TZ:-"Europe/Amsterdam"}
 echo -e "Setting (PHP) time zone to ${TZ}\n"
-sed -i "s#^date.timezone =.*#date.timezone = ${TZ}#g"  /etc/php8/conf.d/spotweb.ini
+sed -i "s#^date.timezone =.*#date.timezone = ${TZ}#g"  /etc/php82/conf.d/spotweb.ini
 
 # Init DB
 if ! /root/init_db.sh ; then
